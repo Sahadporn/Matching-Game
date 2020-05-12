@@ -22,13 +22,16 @@ public class Card extends StackPane {
   /** Image URL used for comparison. */
   private String imageURL;
   /**Count how many time each card got clicked. Prevent crazy clicking.*/
-  private int clickCount = 2;
+  private int clickCount;
   /**Status whether the card has been clicked or not.*/
   private static Card selected = null;
   /**Profile collect scores and lives for each game.*/
   private Profile profile;
+  private int cardWidth;
+  private int cardHeight;
   /**Get instance form TimeCount.*/
   private static TimeCount timerInstance = TimeCount.getTimerInstance();
+  private GameConfig gameConfig = GameConfig.getGameConfigInstance();
 
   /**
    * Contain characteristics of a card in easy mode.
@@ -37,7 +40,10 @@ public class Card extends StackPane {
    * @param profile Profile object to collect scores.
    */
   public Card(String value, Profile profile) {
-    Rectangle border = new Rectangle(50, 50);
+    clickCount = gameConfig.getClickCount();
+    cardWidth = gameConfig.getCardWidth();
+    cardHeight = gameConfig.getCardHeight();
+    Rectangle border = new Rectangle(cardHeight, cardWidth);
     border.setFill(null);
     border.setStroke(Color.DARKBLUE);
 
@@ -63,7 +69,10 @@ public class Card extends StackPane {
    * @param profile   Profile object to collect scores.
    */
   public Card(ImageView imageView, Profile profile , String image_URL ) {
-    Rectangle border = new Rectangle(50, 50);
+    clickCount = gameConfig.getClickCount();
+    cardWidth = gameConfig.getCardWidth();
+    cardHeight = gameConfig.getCardHeight();
+    Rectangle border = new Rectangle(cardHeight, cardWidth);
     border.setFill(null);
     border.setStyle("-fx-stroke: #CA226B;"
         + "-fx-arc-height: 30;"
@@ -148,7 +157,7 @@ public class Card extends StackPane {
           profile.addScore();
         }
         selected = null;
-        clickCount = 2;
+        clickCount = gameConfig.getClickCount();
       });
     }
   }
@@ -198,7 +207,7 @@ public class Card extends StackPane {
    * @param action Runnable
    */
   public void open(Runnable action) {
-    FadeTransition ft = new FadeTransition(Duration.seconds(0.1), text);
+    FadeTransition ft = new FadeTransition(Duration.seconds(gameConfig.getFadeDuration()), text);
     ft.setToValue(1);
     ft.setOnFinished(event -> action.run());
     ft.play();
@@ -210,7 +219,7 @@ public class Card extends StackPane {
    * @param action Runnable
    */
   public void openImage(Runnable action) {
-    FadeTransition ft = new FadeTransition(Duration.seconds(0.1), image);
+    FadeTransition ft = new FadeTransition(Duration.seconds(gameConfig.getFadeDuration()), image);
     ft.setToValue(1);
     ft.setOnFinished(event -> action.run());
     ft.play();
@@ -220,7 +229,7 @@ public class Card extends StackPane {
    * Close the card, Hide the value of the card. Apply for easy mode.
    */
   public void close() {
-    FadeTransition ft = new FadeTransition(Duration.seconds(0.1), text);
+    FadeTransition ft = new FadeTransition(Duration.seconds(gameConfig.getFadeDuration()), text);
     ft.setToValue(0);
     ft.play();
   }
@@ -229,7 +238,7 @@ public class Card extends StackPane {
    * Close the card, Hide the value of the card. Apply for normal mode.
    */
   public void closeImage() {
-    FadeTransition ft = new FadeTransition(Duration.seconds(0.1), image);
+    FadeTransition ft = new FadeTransition(Duration.seconds(gameConfig.getFadeDuration()), image);
     ft.setToValue(0);
     ft.play();
   }

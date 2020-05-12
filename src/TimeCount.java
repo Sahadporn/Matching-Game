@@ -13,16 +13,19 @@ import javafx.util.Duration;
  * @author Sahadporn Charnlertlakha
  */
 public class TimeCount {
-  private int startTime = 60;
-  private int stopTime = 0;
+  private int countdownDuration;
+  private int countdownEnd;
   private Timeline timeline;
   private static TimeCount timerInstance = null;
   private Pane gamePage = null;
   private GamePage.FinishedEventHandler finish;
-  private IntegerProperty timeIntSeconds = new SimpleIntegerProperty(startTime);
+  private IntegerProperty timeIntSeconds = new SimpleIntegerProperty(countdownDuration);
+  private final GameConfig gameConfigInstance = GameConfig.getGameConfigInstance();
 
   private TimeCount() {
     timeline = new Timeline();
+    countdownDuration = gameConfigInstance.getCountdownDuration();
+    countdownEnd = gameConfigInstance.getCountdownEnd();
   }
 
   public void setFinish(GamePage.FinishedEventHandler finish) {
@@ -52,9 +55,9 @@ public class TimeCount {
    * Start the timer.
    */
   public void start() {
-    timeIntSeconds.set(startTime);
+    timeIntSeconds.set(countdownDuration);
     timeline.getKeyFrames().add(
-        new KeyFrame(Duration.seconds(startTime + 1),
+        new KeyFrame(Duration.seconds(countdownDuration + 1),
             new KeyValue(timeIntSeconds, 0))
     );
     timeline.playFromStart();

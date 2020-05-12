@@ -39,18 +39,18 @@ public class GamePage extends Pane {
   private Text timeFld;
   private Label timeLbl;
 
-  /** Check for first mouse click in this scene.*/
-  private boolean isClick = true;
-  private String level = "easy";
-  private static GameFactory gameFactory = new GameFactory();
-  public static Profile profile = Profile.getProfileInstance();
-  private static TimeCount timerInstance = TimeCount.getTimerInstance();
+  private String level;
+  private GameFactory gameFactory = new GameFactory();
+  public Profile profile = Profile.getProfileInstance();
+  private TimeCount timerInstance = TimeCount.getTimerInstance();
+  private GameConfig gameConfig = GameConfig.getGameConfigInstance();
   public FinishedEventHandler finish = new FinishedEventHandler();
 
   /**
    * Start game board creation and initiate timer.
    */
   public GamePage() {
+    level = gameConfig.getLevel();
     initGameBoard();
 
     getChildren().add(layout);
@@ -77,11 +77,11 @@ public class GamePage extends Pane {
     insideLayout = gameFactory.createBoard(level);
 
     if (level.equalsIgnoreCase("easy")) {
-      insideLayout.setLayoutY(200);
-      insideLayout.setLayoutX(150);
+      insideLayout.setLayoutY(gameConfig.getEasyModeHeight());
+      insideLayout.setLayoutX(gameConfig.getEasyModeWidth());
     } else {
-      insideLayout.setLayoutY(180);
-      insideLayout.setLayoutX(100);
+      insideLayout.setLayoutY(gameConfig.getNormalModeHeight());
+      insideLayout.setLayoutX(gameConfig.getNormalModeWidth());
     }
 
 
@@ -201,11 +201,11 @@ public class GamePage extends Pane {
       layout.getChildren().removeAll(insideLayout, resetButton);
       insideLayout = gameFactory.createBoard(level);
       if (level.equalsIgnoreCase("easy")) {
-        insideLayout.setLayoutY(200);
-        insideLayout.setLayoutX(150);
+        insideLayout.setLayoutY(gameConfig.getEasyModeHeight());
+        insideLayout.setLayoutX(gameConfig.getEasyModeWidth());
       } else {
-        insideLayout.setLayoutY(180);
-        insideLayout.setLayoutX(100);
+        insideLayout.setLayoutY(gameConfig.getNormalModeHeight());
+        insideLayout.setLayoutX(gameConfig.getNormalModeWidth());
       }
       profile.resetScores();
       profile.resetLives();
@@ -225,11 +225,11 @@ public class GamePage extends Pane {
     layout.getChildren().removeAll(insideLayout, resetButton);
     insideLayout = gameFactory.createBoard(level);
     if (level.equalsIgnoreCase("easy")) {
-      insideLayout.setLayoutY(200);
-      insideLayout.setLayoutX(150);
+      insideLayout.setLayoutY(gameConfig.getEasyModeHeight());
+      insideLayout.setLayoutX(gameConfig.getEasyModeWidth());
     } else {
-      insideLayout.setLayoutY(180);
-      insideLayout.setLayoutX(100);
+      insideLayout.setLayoutY(gameConfig.getNormalModeHeight());
+      insideLayout.setLayoutX(gameConfig.getNormalModeWidth());
     }
     profile.resetScores();
     profile.resetLives();

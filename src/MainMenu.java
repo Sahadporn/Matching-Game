@@ -42,7 +42,7 @@ public class MainMenu extends Pane {
     try{
       profile.readScore();
     }catch (IOException e){
-      System.out.println("cant read score file");
+      System.out.println("can not read score file");
     }
     getChildren().add(menuLayout);
   }
@@ -71,7 +71,6 @@ public class MainMenu extends Pane {
     iconIV.setFitHeight(300);
     iconIV.setFitWidth(300);
 
-    InputStream ip = this.getClass().getResourceAsStream("/resources/Pictures/easy.png");
     ImageView easyButtonImage = new ImageView(new Image(this.getClass()
         .getResourceAsStream("/resources/Pictures/easy.png")));
     easyButtonImage.setFitHeight(73);

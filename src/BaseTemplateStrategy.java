@@ -9,6 +9,8 @@ import javafx.scene.layout.Pane;
  */
 public class BaseTemplateStrategy implements BoardTemplateStrategy {
 
+  private GameConfig gameConfig = GameConfig.getGameConfigInstance();
+
   /**
    * Create game template with random cards.
    * @param numberOfPairs Total pairs of cards in one game.
@@ -21,7 +23,7 @@ public class BaseTemplateStrategy implements BoardTemplateStrategy {
     Card card;
     Card pair;
     Pane root = new Pane();
-    root.setPrefSize(400, 400);
+    root.setPrefSize(gameConfig.getTemplatePrefSize(), gameConfig.getTemplatePrefSize());
 
     // Generate new char-base cards. Starts from 'A'.
     char c = 'A';
@@ -40,8 +42,8 @@ public class BaseTemplateStrategy implements BoardTemplateStrategy {
     // Add cards to the layout pane.
     for (int i = 0; i < cards.size(); i++) {
       Card cardLayout = cards.get(i);
-      cardLayout.setTranslateX(50 * (i % numberOfRows));
-      cardLayout.setTranslateY(50 * (i / numberOfRows));
+      cardLayout.setTranslateX(gameConfig.getCardWidth() * (i % numberOfRows));
+      cardLayout.setTranslateY(gameConfig.getCardHeight() * (i / numberOfRows));
       root.getChildren().add(cardLayout);
     }
     return root;

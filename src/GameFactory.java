@@ -12,6 +12,8 @@ public class GameFactory {
 
   private static final ImageCards imageCards = new ImageCards();
 
+  private GameConfig gameConfig = GameConfig.getGameConfigInstance();
+
   public GameFactory() {
     imageCards.addImage( profile.getImages() , profile.getImageUrl() );
   }
@@ -23,9 +25,9 @@ public class GameFactory {
    */
   public Pane createBoard(String level) {
     if (level.equalsIgnoreCase("easy")) {
-      return new Easy().makeTemplate(8, 4, profile);
+      return new Easy().makeTemplate(gameConfig.getNumberOfPairs(), gameConfig.getEasyModeRows(), profile);
     } else if (level.equalsIgnoreCase("normal")) {
-      return new Normal().makeTemplate(6 * 6, 6, profile, imageCards.getImages() , imageCards.getImagesURL() );
+      return new Normal().makeTemplate(gameConfig.getNumberOfCards(), gameConfig.getNormalModeRows(), profile, imageCards.getImages() , imageCards.getImagesURL() );
     }
     return null;
   }

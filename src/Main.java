@@ -9,6 +9,7 @@ public class Main extends Application {
   static Scene menuStage;
   static Scene gameStage;
   static Scene highScoreStage;
+  private GameConfig gameConfig = GameConfig.getGameConfigInstance();
 
   public static void main(String[] args) {
     launch(args);
@@ -23,9 +24,9 @@ public class Main extends Application {
     GamePage gameLayout = new GamePage();
     HighScorePage highScorePage = new HighScorePage();
 
-    menuStage = new Scene(mainmenu, 500, 600, Color.MISTYROSE);
-    gameStage = new Scene(gameLayout, 500, 600, Color.LEMONCHIFFON);
-    highScoreStage = new Scene(highScorePage, 500, 600);
+    menuStage = new Scene(mainmenu, gameConfig.getSceneWidth(), gameConfig.getSceneHeight());
+    gameStage = new Scene(gameLayout, gameConfig.getSceneWidth(), gameConfig.getSceneHeight());
+    highScoreStage = new Scene(highScorePage, gameConfig.getSceneWidth(), gameConfig.getSceneHeight());
 
     mainmenu.setGamePage(gameLayout);
     mainStage.setScene(menuStage);

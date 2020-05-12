@@ -10,6 +10,8 @@ import javafx.scene.layout.Pane;
  */
 class Normal extends BaseTemplateStrategy {
 
+  private GameConfig gameConfig = GameConfig.getGameConfigInstance();
+
   @Override
   public Pane makeTemplate(int numberOfPairs, int numberOfRows, Profile profile) {
     return super.makeTemplate(numberOfPairs, numberOfRows, profile);
@@ -25,7 +27,7 @@ class Normal extends BaseTemplateStrategy {
   public Pane makeTemplate(int numberOfCards, int numberOfRows, Profile profile, List<ImageView> images , List<String> imageURLs ) {
     Card card;
     Pane normalTemplate = new Pane();
-    normalTemplate.setPrefSize(400, 400);
+    normalTemplate.setPrefSize(gameConfig.getTemplatePrefSize(), gameConfig.getTemplatePrefSize());
 
     List<Card> cards = new ArrayList<>();
     for (int i = 0; i < numberOfCards; i++) {
@@ -37,8 +39,8 @@ class Normal extends BaseTemplateStrategy {
 
     for (int i = 0; i < cards.size(); i++) {
       Card cardLayout = cards.get(i);
-      cardLayout.setTranslateX(50 * (i % numberOfRows));
-      cardLayout.setTranslateY(50 * (i / numberOfRows));
+      cardLayout.setTranslateX(gameConfig.getCardWidth() * (i % numberOfRows));
+      cardLayout.setTranslateY(gameConfig.getCardHeight() * (i / numberOfRows));
       normalTemplate.getChildren().add(cardLayout);
     }
 
