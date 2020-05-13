@@ -1,3 +1,4 @@
+import java.io.IOException;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
@@ -17,7 +18,6 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
 
 /**
  * The pane for playing the game.
@@ -32,12 +32,12 @@ public class GamePage extends Pane {
   /** The reset button.*/
   private Button resetButton;
 
-  private Text scoreFld;
-  private Label scoreLbl;
-  private Text livesFld;
-  private Label livesLbl;
-  private Text timeFld;
-  private Label timeLbl;
+  private Text scoreField;
+  private Label scoreLabel;
+  private Text livesField;
+  private Label livesLabel;
+  private Text timeField;
+  private Label timeLabel;
 
   private String level;
   private GameFactory gameFactory = new GameFactory();
@@ -114,41 +114,43 @@ public class GamePage extends Pane {
     ImageView scoreIV = new ImageView(scoreImage);
     scoreIV.setFitHeight(80);
     scoreIV.setFitWidth(100);
-    scoreFld = new Text();
-    scoreFld.setStyle("-fx-font-family: Lucida Console;"
+    scoreField = new Text();
+    scoreField.setStyle("-fx-font-family: Lucida Console;"
         + "-fx-fill: #6A287E;"
         + "-fx-font-size: 30;");
-    scoreLbl = new Label("", scoreIV);
-    scoreFld.setLayoutY(85);
-    scoreFld.setLayoutX(200);
+    scoreLabel = new Label("", scoreIV);
+    scoreField.setLayoutY(85);
+    scoreField.setLayoutX(200);
     //Bind label to field
-    scoreLbl.setLabelFor(scoreFld);
-    scoreLbl.setLayoutY(30);
-    scoreLbl.setLayoutX(100);
+    scoreLabel.setLabelFor(scoreField);
+    scoreLabel.setLayoutY(30);
+    scoreLabel.setLayoutX(100);
 
-    ChangeListener <String> scoreListener = (observableValue, oldValue, newValue) -> scoreFld.setText(newValue);
+    ChangeListener<String> scoreListener = (observableValue, oldValue, newValue) ->
+                                                scoreField.setText(newValue);
     profile.addScoreListener(scoreListener);
-    Bindings.bindBidirectional(scoreFld.textProperty(), profile.scoresProperty());
+    Bindings.bindBidirectional(scoreField.textProperty(), profile.scoresProperty());
 
 
-    Image liveImage = new Image(this.getClass().getResourceAsStream("/resources/Pictures/lives.png"));
+    Image liveImage = new Image(this.getClass()
+                .getResourceAsStream("/resources/Pictures/lives.png"));
     ImageView liveIV = new ImageView(liveImage);
     liveIV.setFitHeight(80);
     liveIV.setFitWidth(100);
-    livesFld = new Text();
-    livesFld.setStyle("-fx-font-family: Lucida Console;"
+    livesField = new Text();
+    livesField.setStyle("-fx-font-family: Lucida Console;"
         + "-fx-fill: #6A287E;"
         + "-fx-font-size: 30;");
-    livesFld.setLayoutY(85);
-    livesFld.setLayoutX(350);
-    livesLbl = new Label("", liveIV);
+    livesField.setLayoutY(85);
+    livesField.setLayoutX(350);
+    livesLabel = new Label("", liveIV);
     //bind label to field
-    livesLbl.setLabelFor(livesFld);
-    livesLbl.setLayoutY(30);
-    livesLbl.setLayoutX(250);
+    livesLabel.setLabelFor(livesField);
+    livesLabel.setLayoutY(30);
+    livesLabel.setLayoutX(250);
 
     profile.addLivesListener(new LiveHandler());
-    Bindings.bindBidirectional(livesFld.textProperty(), profile.livesProperty());
+    Bindings.bindBidirectional(livesField.textProperty(), profile.livesProperty());
 
 
     Image timeIcon = new Image(this.getClass()
@@ -156,23 +158,23 @@ public class GamePage extends Pane {
     ImageView timeIV = new ImageView(timeIcon);
     timeIV.setFitHeight(50);
     timeIV.setFitWidth(50);
-    timeLbl = new Label("", timeIV);
-    timeFld = new Text();
-    timeFld.setStyle("-fx-font-family: Lucida Console;"
+    timeLabel = new Label("", timeIV);
+    timeField = new Text();
+    timeField.setStyle("-fx-font-family: Lucida Console;"
         + "-fx-fill: #6A287E;"
         + "-fx-font-size: 25;");
-    timeFld.setLayoutY(140);
-    timeFld.setLayoutX(250);
-    timeLbl.setLayoutY(110);
-    timeLbl.setLayoutX(200);
+    timeField.setLayoutY(140);
+    timeField.setLayoutX(250);
+    timeLabel.setLayoutY(110);
+    timeLabel.setLayoutX(200);
     //bind label to field
-    timeLbl.setLabelFor(timeFld);
-    timeFld.textProperty().bind(timerInstance.getTimerValue());
+    timeLabel.setLabelFor(timeField);
+    timeField.textProperty().bind(timerInstance.getTimerValue());
 
 
     layout.getChildren().addAll(insideLayout, returnButton, resetButton,
-        scoreFld, scoreLbl, livesFld, livesLbl,
-        timeFld, timeLbl);
+        scoreField, scoreLabel, livesField, livesLabel,
+        timeField, timeLabel);
   }
 
   /**
@@ -193,9 +195,9 @@ public class GamePage extends Pane {
     input.setOnCloseRequest(dialogEvent -> {
       int totalScore = Integer.parseInt(profile.scoresProperty().get());
       profile.addScoreToMap(totalScore);
-      try{
+      try {
         profile.writeScore();
-      }catch (IOException e){
+      } catch (IOException e) {
         System.out.println("Cant write score but continue!!");
       }
       layout.getChildren().removeAll(insideLayout, resetButton);
@@ -265,7 +267,7 @@ public class GamePage extends Pane {
     @Override
     public void changed(ObservableValue<? extends String> observableValue,
                         String oldValue, String newValue) {
-      livesFld.setText(newValue);
+      livesField.setText(newValue);
       if (Integer.parseInt(newValue) <= 0) {
         displayGameOver();
       }

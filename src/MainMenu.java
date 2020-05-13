@@ -1,6 +1,4 @@
 import java.io.IOException;
-import java.io.InputStream;
-
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -39,9 +37,9 @@ public class MainMenu extends Pane {
   public MainMenu() {
 
     initMenu();
-    try{
+    try {
       profile.readScore();
-    }catch (IOException e){
+    } catch (IOException e) {
       System.out.println("can not read score file");
     }
     getChildren().add(menuLayout);
@@ -169,9 +167,9 @@ public class MainMenu extends Pane {
 
     @Override
     public void handle(ActionEvent actionEvent) {
-      try{
+      try {
         profile.readScore();
-      }catch (IOException e){
+      } catch (IOException e) {
         System.out.println("cant read score file");
       }
       Main.getMainStage().setScene(Main.getHighScoreStage());

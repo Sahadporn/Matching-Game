@@ -20,7 +20,7 @@ public class Card extends StackPane {
   /**Image that appear on each card. Apply to normal mode.*/
   private ImageView image;
   /** Image URL used for comparison. */
-  private String imageURL;
+  private String imageUrl;
   /**Count how many time each card got clicked. Prevent crazy clicking.*/
   private int clickCount;
   /**Status whether the card has been clicked or not.*/
@@ -68,7 +68,7 @@ public class Card extends StackPane {
    * @param imageView an image on each card.
    * @param profile   Profile object to collect scores.
    */
-  public Card(ImageView imageView, Profile profile , String image_URL ) {
+  public Card(ImageView imageView, Profile profile, String imageUrl) {
     clickCount = gameConfig.getClickCount();
     cardWidth = gameConfig.getCardWidth();
     cardHeight = gameConfig.getCardHeight();
@@ -80,7 +80,7 @@ public class Card extends StackPane {
         + "-fx-stroke-dash-offset: 5;");
 
     image = imageView;
-    imageURL = image_URL;
+    this.imageUrl = imageUrl;
 
     getChildren().add(border);
     getChildren().add(image);
@@ -197,7 +197,7 @@ public class Card extends StackPane {
    * @return true if cards are pairs, False otherwise.
    */
   public boolean imageHasSameValue(Card other) {
-    return imageURL.equalsIgnoreCase(other.imageURL);
+    return imageUrl.equalsIgnoreCase(other.imageUrl);
     //return image.getImage().getUrl().equalsIgnoreCase(other.image.getImage().getUrl());
   }
 

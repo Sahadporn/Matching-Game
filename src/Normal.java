@@ -24,14 +24,15 @@ class Normal extends BaseTemplateStrategy {
    * @param profile Collect score for each correct pairs.
    * @return Pane for the game.
    */
-  public Pane makeTemplate(int numberOfCards, int numberOfRows, Profile profile, List<ImageView> images , List<String> imageURLs ) {
+  public Pane makeTemplate(int numberOfCards, int numberOfRows, Profile profile,
+                           List<ImageView> images, List<String> imageUrls) {
     Card card;
     Pane normalTemplate = new Pane();
     normalTemplate.setPrefSize(gameConfig.getTemplatePrefSize(), gameConfig.getTemplatePrefSize());
 
     List<Card> cards = new ArrayList<>();
     for (int i = 0; i < numberOfCards; i++) {
-      card = new Card(images.get(i), profile , imageURLs.get(i));
+      card = new Card(images.get(i), profile, imageUrls.get(i));
       cards.add(card);
     }
 

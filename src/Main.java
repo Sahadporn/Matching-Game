@@ -26,7 +26,8 @@ public class Main extends Application {
 
     menuStage = new Scene(mainmenu, gameConfig.getSceneWidth(), gameConfig.getSceneHeight());
     gameStage = new Scene(gameLayout, gameConfig.getSceneWidth(), gameConfig.getSceneHeight());
-    highScoreStage = new Scene(highScorePage, gameConfig.getSceneWidth(), gameConfig.getSceneHeight());
+    highScoreStage = new Scene(highScorePage, gameConfig.getSceneWidth(),
+                              gameConfig.getSceneHeight());
 
     mainmenu.setGamePage(gameLayout);
     mainStage.setScene(menuStage);

@@ -1,8 +1,24 @@
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
-import java.nio.file.*;
-import java.util.*;
-
+import java.nio.file.DirectoryStream;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -31,8 +47,8 @@ public class Profile {
   private static Profile profileInstance = null;
 
   private List<ImageView> images = new ArrayList<>();
-  private final List<String>    images_url = new ArrayList<>();
-  private boolean IDE = true;
+  private final List<String> imagesUrls = new ArrayList<>();
+  private boolean ide = true;
 
 
   private Profile() {
@@ -168,42 +184,46 @@ public class Profile {
       }
     }
   }
-  public  boolean LoadResources( String file_or_path , InputStream ins ){
 
-    if ( file_or_path.contains("HighScore") ){
-      try (BufferedInputStream in = new BufferedInputStream(ins) ) {
+  /**
+   * This will load resources content within jar file.
+   * @param fileOrPath  It is a path used to check which resources to load within jar.
+   * @param ins this is a file stream for relevant resources in jar to be loaded.
+   * @return success or fail result of loading.
+   */
+  public  boolean loadResources(String fileOrPath, InputStream ins) {
+
+    if (fileOrPath.contains("HighScore")) {
+      try (BufferedInputStream in = new BufferedInputStream(ins)) {
 
         Scanner scan = new Scanner(in);
         while (scan.hasNext()) {
-          String player_name = scan.next();
+          String playerName = scan.next();
           int score = scan.nextInt();
 
-          if (!scoresMap.containsKey(player_name)) {
-            scoresMap.put(player_name, score);
+          if (!scoresMap.containsKey(playerName)) {
+            scoresMap.put(playerName, score);
           }
         }
       } catch (IOException e) {
-        System.out.println(e + "Read file unsuccessful " + file_or_path );
+        System.out.println(e + "Read file unsuccessful " + fileOrPath);
         System.exit(1);
       }
-    }else{
-      if ( file_or_path.contains("png") || file_or_path.contains("jpg") ){
-        int i = 0;
-        BufferedInputStream isr = new BufferedInputStream(ins);
-        Scanner scan = new Scanner(isr);
+    } else {
+      if (fileOrPath.contains("png") || fileOrPath.contains("jpg")) {
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(ins);
+        Scanner scan = new Scanner(bufferedInputStream);
         while (scan.hasNext()) {
-          String file_name = scan.nextLine();
-          ImageView im1 = new ImageView(new Image(file_or_path));
+          ImageView im1 = new ImageView(new Image(fileOrPath));
           images.add(im1);
-          images_url.add(file_or_path);
-          ImageView im2 = new ImageView(new Image(file_or_path));
+          imagesUrls.add(fileOrPath);
+          ImageView im2 = new ImageView(new Image(fileOrPath));
           images.add(im2);
-          images_url.add(file_or_path);
+          imagesUrls.add(fileOrPath);
           im1.setFitHeight(50);
           im1.setFitWidth(50);
           im2.setFitHeight(50);
           im2.setFitWidth(50);
-//          System.out.println("i " + ++i + " name " + file_or_path);
           break;
         }
       }
@@ -211,70 +231,74 @@ public class Profile {
     }
     return true;
   }
-  public String getPath(String curr_path) throws IOException {
 
-    String fooFolder  = new String("resources/");
+  /**
+   *  This method to get proper path in jar file.
+   * @param currPath  the absolute path
+   * @return  proper path.
+   * @throws IOException  raised exception if relevant resources couldnt be loaded.
+   */
+  public String getPath(String currPath) throws IOException {
 
-/** i want to know if i am inside the jar or working on the IDE*/
-    if( curr_path.contains("jar")){
-      //System.out.println("inside jar " + curr_path);
-      /** jar case */
-      try{
+    String folder  = new String("resources/");
+
+    // i want to know if i am inside the jar or working on the IDE.
+    if (currPath.contains("jar")) {
+      // jar case
+      try {
         URL jar = Main.class.getProtectionDomain().getCodeSource().getLocation();
-        String name = jar.toString().substring(0,jar.toString().length()-15);
-        System.out.println(jar);
         Path jarFile = Paths.get(jar.toString().substring("file:".length()));
-        FileSystem fs = FileSystems.newFileSystem(jarFile, null);
-        Path tt = fs.getPath(fooFolder);
-        DirectoryStream<Path> directoryStream = Files.newDirectoryStream(fs.getPath(fooFolder));
-        for(Path p: directoryStream){
-          InputStream is = Main.class.getResourceAsStream(p.toString()) ;
-          if ( LoadResources(p.toString() , is ) == false ){
-            System.out.println("erro high score");
+        FileSystem fileSystem = FileSystems.newFileSystem(jarFile, null);
+        DirectoryStream<Path> directoryStream = Files.newDirectoryStream(fileSystem.getPath(folder));
+        for (Path path: directoryStream) {
+          InputStream is = Main.class.getResourceAsStream(path.toString());
+          if (loadResources(path.toString(), is) == false) {
+            System.out.println("error high score");
             throw new IOException();
           }
         }
-      }catch(IOException e) {
+      } catch (IOException e) {
         System.out.println("Exception");
       }
     }
 
-    return curr_path;
+    return currPath;
   }
 
   /**
    * Read score from text file.
    */
   public void readScore() throws IOException {
+    URL url = Main.class.getProtectionDomain().getCodeSource().getLocation();
+    String  urls = url.toString();
+    String correctPath = null;
+    String currentPath = new File(".").getCanonicalPath();
 
-    String respath = "/resources/HighScore.txt";
-    InputStream ins = Main.class.getResourceAsStream(respath);
-    URL uu = Main.class.getProtectionDomain().getCodeSource().getLocation();
-    String  url_s = uu.toString();
-//    String sp  = uu.getPath();
-//    String  ns = uu.getFile();
-    String tt = null;
-    String current_Path = new File(".").getCanonicalPath();
+    if (urls.contains("jar")) {
+      ide = false;
+      try {
+        correctPath = getPath(urls + currentPath);
 
-    if( url_s.contains("jar")){
-      IDE = false;
-      try{
-        tt = getPath( url_s + current_Path );
-
-      }catch(IOException e) {
-        System.out.println(e + "Read file unsuccessful " + current_Path + " tt " + tt);
+      } catch (IOException e) {
+        System.out.println(e + "Read file unsuccessful "
+                  + currentPath + " correctPath " + correctPath);
         System.exit(1);
       }
-    }else{
-      readFileScore( current_Path );
+    } else {
+      readFileScore(currentPath);
     }
 
-    return ;
+    return;
   }
 
-  public void readFileScore( String curr_path ){
+  /**
+   *  This method is loaded score file when in IDE mode.
+   * @param currPath  this is a path to file.
+   */
+  public void readFileScore(String currPath) {
 
-    try (BufferedReader in = new BufferedReader(new FileReader( curr_path +"/src/resources/HighScore.txt"));) {
+    try (BufferedReader in = new BufferedReader(new FileReader(currPath
+                                                  + "/src/resources/HighScore.txt"))) {
 
       Scanner scan = new Scanner(in);
       while (scan.hasNext()) {
@@ -291,18 +315,17 @@ public class Profile {
       System.out.println(e);
     }
   }
+
   /**
    * Write score to text file.
    */
   public void writeScore() throws IOException {
 
-    String current_Path = new File(".").getCanonicalPath();
+    String currentPath = new File(".").getCanonicalPath();
 
-    // new FileReader("ProjectBeta/src/resources/HighScore.txt"))) {
+    String fileName = new String(currentPath + "/src/resources/HighScore.txt");
 
-    String file_name = new String( current_Path + "/src/resources/HighScore.txt");
-
-    try (OutputStream out = new FileOutputStream(file_name)) {
+    try (OutputStream out = new FileOutputStream(fileName)) {
       Set<String> name = scoresMap.keySet();
       for (String element : name) {
         String writeScore = element + " " + scoresMap.get(element) + "\n";
@@ -311,17 +334,29 @@ public class Profile {
       }
 
     } catch (IOException e) {
-      System.out.println(e + "Write file unsuccessful");
+      //System.out.println(e + "Write file unsuccessful");
     }
   }
+
   /**
    * Get scoreMap.
    * @return map of player names and scores.
    */
-  public Map<String, Integer> getScoresMap() { return scoresMap; }
-  public List<ImageView> getImages(){ return images; }
-  public List<String>    getImageUrl(){  return images_url; }
-  public boolean isIDE(){ return IDE; }
+  public Map<String, Integer> getScoresMap() {
+    return scoresMap;
+  }
+
+  public List<ImageView> getImages() {
+    return images;
+  }
+
+  public List<String>    getImageUrl() {
+    return imagesUrls;
+  }
+
+  public boolean isIde() {
+    return ide;
+  }
 
 }
 

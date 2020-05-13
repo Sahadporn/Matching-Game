@@ -14,12 +14,16 @@ public class GameConfig {
     prop = new Properties();
 
     try {
-      LoadConfig();
+      loadConfig();
     } catch (IOException e) {
       System.out.println("Config file error, using default config");
     }
   }
 
+  /**
+   * Get GameConfig instance.
+   * @return game config instance
+   */
   public static GameConfig getGameConfigInstance() {
     if (gameConfigInstance == null) {
       gameConfigInstance = new GameConfig();
@@ -99,13 +103,18 @@ public class GameConfig {
     return Integer.parseInt(prop.getOrDefault("number_of_cards", "36").toString());
   }
 
-  public void LoadConfig() throws IOException {
+  /**
+   * This is to load config file.
+   * @throws IOException The error will be throw if cant find config.
+   *                     Then the default values will be used.
+   */
+  public void loadConfig() throws IOException {
 
     try (InputStream inputStream = new FileInputStream(
         configPath + "Config.properties"
     )) {
       prop.load(inputStream);
-    } catch (FileNotFoundException FnF) {
+    } catch (FileNotFoundException f) {
       System.out.println("Config file not found. Using default value");
     }
   }

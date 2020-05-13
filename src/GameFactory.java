@@ -1,6 +1,5 @@
-import javafx.scene.layout.Pane;
-
 import java.io.IOException;
+import javafx.scene.layout.Pane;
 
 /**
  * Call the makeTemplate depends on the level selected by player.
@@ -14,15 +13,19 @@ public class GameFactory {
 
   private GameConfig gameConfig = GameConfig.getGameConfigInstance();
 
+  /**
+   *  This is a constructor to create GameFactory.
+   */
   public GameFactory() {
-    try{
+    try {
       profile.readScore();
-      if ( profile.isIDE() )
+      if (profile.isIde()) {
         imageCards.addImage();
-      else
-        imageCards.addImage( profile.getImages() , profile.getImageUrl() );
+      } else {
+        imageCards.addImage(profile.getImages(), profile.getImageUrl());
+      }
 
-    }catch ( IOException e){
+    } catch (IOException e) {
       System.out.println("error load score");
     }
   }
@@ -34,9 +37,12 @@ public class GameFactory {
    */
   public Pane createBoard(String level) {
     if (level.equalsIgnoreCase("easy")) {
-      return new Easy().makeTemplate(gameConfig.getNumberOfPairs(), gameConfig.getEasyModeRows(), profile);
+      return new Easy().makeTemplate(gameConfig.getNumberOfPairs(), gameConfig.getEasyModeRows(),
+                                      profile);
     } else if (level.equalsIgnoreCase("normal")) {
-      return new Normal().makeTemplate(gameConfig.getNumberOfCards(), gameConfig.getNormalModeRows(), profile, imageCards.getImages() , imageCards.getImagesURL() );
+      return new Normal().makeTemplate(gameConfig.getNumberOfCards(),
+                                       gameConfig.getNormalModeRows(),
+                                      profile, imageCards.getImages(), imageCards.getImagesUrls());
     }
     return null;
   }
