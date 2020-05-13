@@ -100,12 +100,13 @@ public class GameConfig {
   }
 
   public void LoadConfig() throws IOException {
+
     try (InputStream inputStream = new FileInputStream(
         configPath + "Config.properties"
     )) {
       prop.load(inputStream);
     } catch (FileNotFoundException FnF) {
-      System.out.println("Config file not found.");
+      System.out.println("Config file not found. Using default value");
     }
   }
 }

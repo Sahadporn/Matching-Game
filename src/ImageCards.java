@@ -61,8 +61,11 @@ public class ImageCards {
     //String path = this.getClass().getResource("/resources/TsumTsum/").toString();
     //String newPath = path.substring(5);
 
+    images      = new ArrayList<>();
+    images_url  = new ArrayList<>();
+
     String current_Path = new File(".").getCanonicalPath();
-    String newPath = new String(current_Path + "/src/resources/TsumTsum");
+    String newPath = new String(current_Path + "/src/resources/");
     // new FileReader("ProjectBeta/src/resources/HighScore.txt"))) {
 
     String file = "";

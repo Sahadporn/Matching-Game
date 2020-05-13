@@ -32,7 +32,7 @@ public class Profile {
 
   private List<ImageView> images = new ArrayList<>();
   private final List<String>    images_url = new ArrayList<>();
-
+  private boolean IDE = true;
 
 
   private Profile() {
@@ -213,7 +213,7 @@ public class Profile {
   }
   public String getPath(String curr_path) throws IOException {
 
-    String fooFolder  = new String("src/resources/");
+    String fooFolder  = new String("resources/");
 
 /** i want to know if i am inside the jar or working on the IDE*/
     if( curr_path.contains("jar")){
@@ -223,10 +223,9 @@ public class Profile {
         URL jar = Main.class.getProtectionDomain().getCodeSource().getLocation();
         String name = jar.toString().substring(0,jar.toString().length()-15);
         System.out.println(jar);
-        //jar.toString() begins with file:
-        //i want to trim it out...
         Path jarFile = Paths.get(jar.toString().substring("file:".length()));
         FileSystem fs = FileSystems.newFileSystem(jarFile, null);
+        Path tt = fs.getPath(fooFolder);
         DirectoryStream<Path> directoryStream = Files.newDirectoryStream(fs.getPath(fooFolder));
         for(Path p: directoryStream){
           InputStream is = Main.class.getResourceAsStream(p.toString()) ;
@@ -251,29 +250,54 @@ public class Profile {
     String respath = "/resources/HighScore.txt";
     InputStream ins = Main.class.getResourceAsStream(respath);
     URL uu = Main.class.getProtectionDomain().getCodeSource().getLocation();
-    String  ss = uu.toString();
-    String sp  = uu.getPath();
+    String  url_s = uu.toString();
+//    String sp  = uu.getPath();
 //    String  ns = uu.getFile();
     String tt = null;
     String current_Path = new File(".").getCanonicalPath();
-    try{
-      tt = getPath( ss + current_Path );
 
-    }catch(IOException e){
-      System.out.println(e + "Read file unsuccessful " + current_Path + " tt " + tt);
-      System.exit(1);
+    if( url_s.contains("jar")){
+      IDE = false;
+      try{
+        tt = getPath( url_s + current_Path );
 
+      }catch(IOException e) {
+        System.out.println(e + "Read file unsuccessful " + current_Path + " tt " + tt);
+        System.exit(1);
+      }
+    }else{
+      readFileScore( current_Path );
     }
 
     return ;
   }
 
+  public void readFileScore( String curr_path ){
+
+    try (BufferedReader in = new BufferedReader(new FileReader( curr_path +"/src/resources/HighScore.txt"));) {
+
+      Scanner scan = new Scanner(in);
+      while (scan.hasNext()) {
+        String name = scan.next();
+        int score = scan.nextInt();
+
+        if (!scoresMap.containsKey(name)) {
+          scoresMap.put(name, score);
+          System.out.println(scoresMap.keySet());
+        }
+
+      }
+    } catch (IOException e) {
+      System.out.println(e);
+    }
+  }
   /**
    * Write score to text file.
    */
   public void writeScore() throws IOException {
 
     String current_Path = new File(".").getCanonicalPath();
+
     // new FileReader("ProjectBeta/src/resources/HighScore.txt"))) {
 
     String file_name = new String( current_Path + "/src/resources/HighScore.txt");
@@ -290,15 +314,14 @@ public class Profile {
       System.out.println(e + "Write file unsuccessful");
     }
   }
-
   /**
    * Get scoreMap.
    * @return map of player names and scores.
    */
-  public Map<String, Integer> getScoresMap() {
-    return scoresMap;
-  }
+  public Map<String, Integer> getScoresMap() { return scoresMap; }
   public List<ImageView> getImages(){ return images; }
   public List<String>    getImageUrl(){  return images_url; }
+  public boolean isIDE(){ return IDE; }
+
 }
 

@@ -15,7 +15,16 @@ public class GameFactory {
   private GameConfig gameConfig = GameConfig.getGameConfigInstance();
 
   public GameFactory() {
-    imageCards.addImage( profile.getImages() , profile.getImageUrl() );
+    try{
+      profile.readScore();
+      if ( profile.isIDE() )
+        imageCards.addImage();
+      else
+        imageCards.addImage( profile.getImages() , profile.getImageUrl() );
+
+    }catch ( IOException e){
+      System.out.println("error load score");
+    }
   }
 
   /**
