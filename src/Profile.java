@@ -236,7 +236,7 @@ public class Profile {
    *  This method to get proper path in jar file.
    * @param currPath  the absolute path
    * @return  proper path.
-   * @throws IOException  raised exception if relevant resources couldnt be loaded.
+   * @throws IOException  raised exception if relevant resources could not be loaded.
    */
   public String getPath(String currPath) throws IOException {
 
@@ -247,7 +247,7 @@ public class Profile {
       // jar case
       try {
         URL jar = Main.class.getProtectionDomain().getCodeSource().getLocation();
-        Path jarFile = Paths.get(jar.toString().substring("file:".length()));
+        Path jarFile = Paths.get(jar.toString().substring(getAnotherSlash().length()));
         FileSystem fileSystem = FileSystems.newFileSystem(jarFile, null);
         DirectoryStream<Path> directoryStream = Files.newDirectoryStream(fileSystem.getPath(folder));
         for (Path path: directoryStream) {
@@ -307,12 +307,11 @@ public class Profile {
 
         if (!scoresMap.containsKey(name)) {
           scoresMap.put(name, score);
-          System.out.println(scoresMap.keySet());
         }
 
       }
     } catch (IOException e) {
-      System.out.println(e);
+      System.out.println(e + " Cannot read file");
     }
   }
 
@@ -358,5 +357,16 @@ public class Profile {
     return ide;
   }
 
+  /**
+   * Windows needs addition back slash in path when find in jar.
+   * @return proper path to be removed.
+   */
+  public String getAnotherSlash(){
+    String windows = System.getProperty("os.name").toLowerCase();
+    if (windows.contains("win"))
+      return "file:/";
+    else
+      return "file:";
+  }
 }
 

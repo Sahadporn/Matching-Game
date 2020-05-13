@@ -3,7 +3,7 @@
 
 #### Table of Content
 1. [Introduction](#Introduction)
-2. [How to play & navigation](#How-to-play-&-navigation)
+2. [How to play and navigation](#How-to-play-and-navigation)
 3. [Compile and run](#Compile-and-run)
 
 #### Introduction
@@ -16,7 +16,7 @@ Why Roller?
 Roller is a NPC from a popular ds retro mini game 'Harvest Moon'.
 He stands inside a casino in the matching game section.
 
-#### How to play & navigation
+#### How to play and navigation
 Main menu
 - Exit button is on the top left of the main menu screen.
 - Players can save their highest scores by
@@ -34,4 +34,14 @@ Game page
 from previous game will not be recorded. 
 
 #### Compile and run
+Requirement - java 8 with javaFx included.
+
+For IntelliJ
+- Clone the repository
+- go to Project Structure -> Set Artifact -> javaFx Application -> Matching_Game.jar
+- Run on cmd or build artifact and run on IDE
+
+#### Author
+Sahadporn Charnlertlakha 6210545611
+
 
