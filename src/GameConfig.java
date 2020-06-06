@@ -1,4 +1,5 @@
-import java.io.FileInputStream;
+
+import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,11 +7,9 @@ import java.util.Properties;
 
 public class GameConfig {
   private static GameConfig gameConfigInstance;
-  private String configPath;
   private Properties prop;
 
   private GameConfig() {
-    configPath = this.getClass().getResource("/resources/Config/").getPath();
     prop = new Properties();
 
     try {
@@ -109,11 +108,10 @@ public class GameConfig {
    *                     Then the default values will be used.
    */
   public void loadConfig() throws IOException {
+    InputStream is  = Main.class.getResourceAsStream("resources/Config/Config.properties");
 
-    try (InputStream inputStream = new FileInputStream(
-        configPath + "Config.properties"
-    )) {
-      prop.load(inputStream);
+    try (BufferedInputStream bufferedInputStream = new BufferedInputStream(is)){
+      prop.load(bufferedInputStream);
     } catch (FileNotFoundException f) {
       System.out.println("Config file not found. Using default value");
     }

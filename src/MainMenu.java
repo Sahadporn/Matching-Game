@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -37,11 +38,7 @@ public class MainMenu extends Pane {
   public MainMenu() {
 
     initMenu();
-    try {
-      profile.readScore();
-    } catch (IOException e) {
-      System.out.println("can not read score file");
-    }
+    profile.readScore();
     getChildren().add(menuLayout);
   }
 
@@ -100,6 +97,9 @@ public class MainMenu extends Pane {
     nameInput.setStyle("-fx-background-color: #FFDFFD;"
         + "-fx-text-fill: #583759;"
         + "-fx-font-family: Lucida Console;");
+
+    nameInput.setOnKeyPressed(event -> {if (event.getCode().equals(KeyCode.ENTER)) {
+                                profile.addName(nameInput.getText());}});
 
     ImageView enterIconImage = new ImageView(new Image(this.getClass()
         .getResourceAsStream("/resources/Pictures/icon.png")));
@@ -167,11 +167,7 @@ public class MainMenu extends Pane {
 
     @Override
     public void handle(ActionEvent actionEvent) {
-      try {
-        profile.readScore();
-      } catch (IOException e) {
-        System.out.println("cant read score file");
-      }
+      profile.readScore();
       Main.getMainStage().setScene(Main.getHighScoreStage());
     }
   }

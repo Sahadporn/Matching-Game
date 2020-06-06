@@ -17,17 +17,8 @@ public class GameFactory {
    *  This is a constructor to create GameFactory.
    */
   public GameFactory() {
-    try {
-      profile.readScore();
-      if (profile.isIde()) {
-        imageCards.addImage();
-      } else {
-        imageCards.addImage(profile.getImages(), profile.getImageUrl());
-      }
-
-    } catch (IOException e) {
-      System.out.println("error load score");
-    }
+    profile.readScore();
+    imageCards.LoadImages();
   }
 
   /**

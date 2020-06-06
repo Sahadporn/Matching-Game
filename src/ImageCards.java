@@ -1,8 +1,11 @@
-import java.io.File;
-import java.io.IOException;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Scanner;
+import java.util.StringTokenizer;
+
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -15,48 +18,12 @@ public class ImageCards {
   List<ImageView> images;
   List<String> imagesUrls;
 
+  private GameConfig gameConfig = GameConfig.getGameConfigInstance();
 
-  /**
-   * Add image to the list.
-   */
-  public void addImage() throws IOException {
 
-    images      = new ArrayList<>();
-    imagesUrls = new ArrayList<>();
-
-    String currentPath = new File(".").getCanonicalPath();
-    String newPath = new String(currentPath + "/src/resources/");
-
-    String file = "";
-    File folder = null;
-
-    try {
-      folder = new File(newPath);
-    } catch (NullPointerException e) {
-      System.out.println("Resources file not found");
-      System.exit(1);
-    }
-    File[] files = null;
-    try {
-      files = folder.listFiles();
-      for (int i = 0; i < Objects.requireNonNull(files).length; i++) {
-        if (files[i].getName().endsWith("png")) {
-          file = "file:" + files[i].getAbsolutePath();
-          ImageView im1 = new ImageView(new Image(file));
-          images.add(im1);
-          imagesUrls.add(file);
-          ImageView im2 = new ImageView(new Image(file));
-          images.add(im2);
-          imagesUrls.add(file);
-          im1.setFitHeight(50);
-          im1.setFitWidth(50);
-          im2.setFitHeight(50);
-          im2.setFitWidth(50);
-        }
-      }
-    } catch (NullPointerException e) {
-      System.exit(1);
-    }
+  public ImageCards() {
+    images = new ArrayList<ImageView>();
+    imagesUrls = new ArrayList<String>();
   }
 
   /**
@@ -67,6 +34,40 @@ public class ImageCards {
   public void addImage(List<ImageView> imageViews, List<String> imagesUrls) {
     images    = new ArrayList<>(imageViews);
     this.imagesUrls = new ArrayList<>(imagesUrls);
+  }
+
+  public void LoadImages() {
+    String folder = "resources/TsumTsum/";
+
+    String ImageNameList ="alice.png;alien.png;boo.png;cheshire.png;chip.png;daisy.png;donald.png;" +
+        "dumbo.png;mickey.png;mike.png;perry.png;pluto.png;pooh.png;Rabbit.png;" +
+        "sally.png;sully.png;tigger.png;woody.png";
+    StringTokenizer tokenizer = new StringTokenizer(ImageNameList, ";");
+    InputStream inputStream;
+    String imageName;
+
+    while (tokenizer.hasMoreTokens()) {
+      imageName = folder + tokenizer.nextToken();
+      inputStream = Main.class.getResourceAsStream(imageName);
+      ImageToImageList(inputStream, imageName);
+    }
+  }
+
+  private void ImageToImageList(InputStream inputStream, String imageName) {
+    BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+    Scanner scanner = new Scanner(bufferedInputStream);
+    if (scanner.hasNext()) {
+      ImageView imageView1 = new ImageView(new Image(imageName));
+      images.add(imageView1);
+      imagesUrls.add(imageName);
+      ImageView imageView2 = new ImageView(new Image(imageName));
+      images.add(imageView2);
+      imagesUrls.add(imageName);
+      imageView1.setFitWidth(gameConfig.getCardWidth());
+      imageView1.setFitHeight(gameConfig.getCardHeight());
+      imageView2.setFitWidth(gameConfig.getCardWidth());
+      imageView2.setFitHeight(gameConfig.getCardHeight());
+    }
   }
 
   /**

@@ -126,9 +126,7 @@ public class GamePage extends Pane {
     scoreLabel.setLayoutY(30);
     scoreLabel.setLayoutX(100);
 
-    ChangeListener<String> scoreListener = (observableValue, oldValue, newValue) ->
-                                                scoreField.setText(newValue);
-    profile.addScoreListener(scoreListener);
+    profile.addScoreListener(new ScoreHandler());
     Bindings.bindBidirectional(scoreField.textProperty(), profile.scoresProperty());
 
 
@@ -188,31 +186,16 @@ public class GamePage extends Pane {
   /**
    * Call alert box when live equal to 0 or time runs out.
    */
-  public void displayGameOver() {
+  public void displayGameOver(String Title) {
     Alert input = new Alert(Alert.AlertType.INFORMATION);
-    input.setTitle("Game Over");
+    input.setTitle(Title);
     input.setHeaderText("Your score: " + profile.getScores());
     input.setOnCloseRequest(dialogEvent -> {
       int totalScore = Integer.parseInt(profile.scoresProperty().get());
       profile.addScoreToMap(totalScore);
-      try {
-        profile.writeScore();
-      } catch (IOException e) {
-        System.out.println("Cant write score but continue!!");
-      }
-      layout.getChildren().removeAll(insideLayout, resetButton);
-      insideLayout = gameFactory.createBoard(level);
-      if (level.equalsIgnoreCase("easy")) {
-        insideLayout.setLayoutY(gameConfig.getEasyModeHeight());
-        insideLayout.setLayoutX(gameConfig.getEasyModeWidth());
-      } else {
-        insideLayout.setLayoutY(gameConfig.getNormalModeHeight());
-        insideLayout.setLayoutX(gameConfig.getNormalModeWidth());
-      }
-      profile.resetScores();
-      profile.resetLives();
+      profile.writeScore();
+      reBuildBoard(level);
       timerInstance.resetTimer();
-      layout.getChildren().addAll(insideLayout, resetButton);
       Main.getMainStage().setScene(Main.getMenuStage());
     });
     timerInstance.stop();
@@ -245,7 +228,7 @@ public class GamePage extends Pane {
 
     @Override
     public void handle(ActionEvent actionEvent) {
-      displayGameOver();
+      displayGameOver("Game Over");
     }
   }
 
@@ -269,7 +252,21 @@ public class GamePage extends Pane {
                         String oldValue, String newValue) {
       livesField.setText(newValue);
       if (Integer.parseInt(newValue) <= 0) {
-        displayGameOver();
+        displayGameOver("Game Over");
+      }
+    }
+  }
+
+  /**
+   * Check for event when player wins the game.
+   */
+  class ScoreHandler implements ChangeListener<String> {
+
+    @Override
+    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+      scoreField.setText(newValue);
+      if (Integer.parseInt(newValue) == gameConfig.getNumberOfPairs() || Integer.parseInt(newValue) == gameConfig.getNumberOfCards()) {
+        displayGameOver("Congratulations!!! You win!");
       }
     }
   }
