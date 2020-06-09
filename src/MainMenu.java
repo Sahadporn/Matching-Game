@@ -1,4 +1,3 @@
-import java.io.IOException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -38,7 +37,7 @@ public class MainMenu extends Pane {
   public MainMenu() {
 
     initMenu();
-    profile.readScore();
+    profile.readScores();
     getChildren().add(menuLayout);
   }
 
@@ -50,24 +49,21 @@ public class MainMenu extends Pane {
     menuLayout.setStyle(
         "-fx-pref-width: 500;"
             + "-fx-pref-height: 600;");
-    Image background = new Image(this.getClass()
-        .getResourceAsStream("/resources/Pictures/bg11.gif"));
+    Image background = new Image("/resources/Pictures/bg11.gif");
     BackgroundImage backgroundImage = new BackgroundImage(background, BackgroundRepeat.REPEAT,
         BackgroundRepeat.REPEAT,
         BackgroundPosition.DEFAULT,
         BackgroundSize.DEFAULT);
     menuLayout.setBackground(new Background(backgroundImage));
 
-    Image icon = new Image(this.getClass()
-        .getResourceAsStream("/resources/Pictures/icon1.png"));
+    Image icon = new Image("/resources/Pictures/icon1.png");
     ImageView iconIV = new ImageView(icon);
     iconIV.setLayoutX(100);
     iconIV.setLayoutY(30);
     iconIV.setFitHeight(300);
     iconIV.setFitWidth(300);
 
-    ImageView easyButtonImage = new ImageView(new Image(this.getClass()
-        .getResourceAsStream("/resources/Pictures/easy.png")));
+    ImageView easyButtonImage = new ImageView("/resources/Pictures/easy.png");
     easyButtonImage.setFitHeight(73);
     easyButtonImage.setFitWidth(84);
     Button easyModeButton = new Button("", easyButtonImage);
@@ -77,8 +73,7 @@ public class MainMenu extends Pane {
     easyModeButton.setStyle("-fx-background-color: transparent;");
 
 
-    ImageView normalButtonImage = new ImageView(new Image(this.getClass()
-        .getResourceAsStream("/resources/Pictures/normal.png")));
+    ImageView normalButtonImage = new ImageView("/resources/Pictures/normal.png");
     normalButtonImage.setFitHeight(73);
     normalButtonImage.setFitWidth(100);
     Button normalModeButton = new Button("", normalButtonImage);
@@ -101,8 +96,7 @@ public class MainMenu extends Pane {
     nameInput.setOnKeyPressed(event -> {if (event.getCode().equals(KeyCode.ENTER)) {
                                 profile.addName(nameInput.getText());}});
 
-    ImageView enterIconImage = new ImageView(new Image(this.getClass()
-        .getResourceAsStream("/resources/Pictures/icon.png")));
+    ImageView enterIconImage = new ImageView("/resources/Pictures/icon.png");
     enterIconImage.setFitWidth(30);
     enterIconImage.setFitHeight(30);
     Button enterButton = new Button("Enter");
@@ -115,8 +109,7 @@ public class MainMenu extends Pane {
     enterButton.setLayoutX(300);
 
 
-    Image highScoreImage = new Image(this.getClass()
-        .getResourceAsStream("/resources/Pictures/bar.png"));
+    Image highScoreImage = new Image("/resources/Pictures/bar.png");
     ImageView highScoreIV = new ImageView(highScoreImage);
     highScoreIV.setFitHeight(60);
     highScoreIV.setFitWidth(125);
@@ -127,8 +120,7 @@ public class MainMenu extends Pane {
     highScoreButton.setLayoutY(440);
 
 
-    Image exitImg = new Image(this.getClass()
-        .getResourceAsStream("/resources/Pictures/exit.png"));
+    Image exitImg = new Image("/resources/Pictures/exit.png");
     ImageView exitIV = new ImageView(exitImg);
     exitIV.setFitHeight(23);
     exitIV.setFitWidth(70);
@@ -167,7 +159,7 @@ public class MainMenu extends Pane {
 
     @Override
     public void handle(ActionEvent actionEvent) {
-      profile.readScore();
+      profile.readScores();
       Main.getMainStage().setScene(Main.getHighScoreStage());
     }
   }

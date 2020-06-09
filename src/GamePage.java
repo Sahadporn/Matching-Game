@@ -1,4 +1,3 @@
-import java.io.IOException;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
@@ -66,8 +65,7 @@ public class GamePage extends Pane {
     layout.setStyle(
         "-fx-pref-width: 500;"
             + "-fx-pref-height: 600;");
-    Image background = new Image(this.getClass()
-        .getResourceAsStream("/resources/Pictures/bg12.gif"));
+    Image background = new Image("/resources/Pictures/bg12.gif");
     BackgroundImage backgroundImage = new BackgroundImage(background, BackgroundRepeat.REPEAT,
         BackgroundRepeat.REPEAT,
         BackgroundPosition.DEFAULT,
@@ -85,8 +83,7 @@ public class GamePage extends Pane {
     }
 
 
-    Image returnButtonImage = new Image(this.getClass()
-        .getResourceAsStream("/resources/Pictures/return.png"));
+    Image returnButtonImage = new Image("/resources/Pictures/return.png");
     ImageView returnButtonIV = new ImageView(returnButtonImage);
     returnButtonIV.setFitHeight(80);
     returnButtonIV.setFitWidth(100);
@@ -97,8 +94,7 @@ public class GamePage extends Pane {
     returnButton.setOnAction(event -> Main.getMainStage().setScene(Main.getMenuStage()));
 
 
-    Image resetButtonImage = new Image(this.getClass()
-        .getResourceAsStream("/resources/Pictures/reset.png"));
+    Image resetButtonImage = new Image("/resources/Pictures/reset.png");
     ImageView resetButtonIV = new ImageView(resetButtonImage);
     resetButtonIV.setFitHeight(40);
     resetButtonIV.setFitWidth(80);
@@ -109,8 +105,7 @@ public class GamePage extends Pane {
     resetButton.setOnAction(new ResetHandler());
 
 
-    Image scoreImage = new Image(this.getClass()
-        .getResourceAsStream("/resources/Pictures/pairs.png"));
+    Image scoreImage = new Image("/resources/Pictures/pairs.png");
     ImageView scoreIV = new ImageView(scoreImage);
     scoreIV.setFitHeight(80);
     scoreIV.setFitWidth(100);
@@ -127,11 +122,10 @@ public class GamePage extends Pane {
     scoreLabel.setLayoutX(100);
 
     profile.addScoreListener(new ScoreHandler());
-    Bindings.bindBidirectional(scoreField.textProperty(), profile.scoresProperty());
+    Bindings.bindBidirectional(scoreField.textProperty(), profile.scoreProperty());
 
 
-    Image liveImage = new Image(this.getClass()
-                .getResourceAsStream("/resources/Pictures/lives.png"));
+    Image liveImage = new Image("/resources/Pictures/lives.png");
     ImageView liveIV = new ImageView(liveImage);
     liveIV.setFitHeight(80);
     liveIV.setFitWidth(100);
@@ -151,8 +145,7 @@ public class GamePage extends Pane {
     Bindings.bindBidirectional(livesField.textProperty(), profile.livesProperty());
 
 
-    Image timeIcon = new Image(this.getClass()
-        .getResourceAsStream("/resources/Pictures/time.png"));
+    Image timeIcon = new Image("/resources/Pictures/time.png");
     ImageView timeIV = new ImageView(timeIcon);
     timeIV.setFitHeight(50);
     timeIV.setFitWidth(50);
@@ -191,7 +184,7 @@ public class GamePage extends Pane {
     input.setTitle(Title);
     input.setHeaderText("Your score: " + profile.getScores());
     input.setOnCloseRequest(dialogEvent -> {
-      int totalScore = Integer.parseInt(profile.scoresProperty().get());
+      int totalScore = Integer.parseInt(profile.scoreProperty().get());
       profile.addScoreToMap(totalScore);
       profile.writeScore();
       reBuildBoard(level);

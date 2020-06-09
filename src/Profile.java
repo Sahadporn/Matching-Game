@@ -2,9 +2,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -12,7 +10,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.Alert;
-import javafx.scene.image.ImageView;
 
 /**
  * Collect scores and lives for each player.
@@ -22,7 +19,7 @@ public class Profile {
 
   private static int totalScores = 0;
 
-  private StringProperty scores = new SimpleStringProperty();
+  private StringProperty score = new SimpleStringProperty();
 
   private static int totalLives = 10;
 
@@ -58,7 +55,7 @@ public class Profile {
    * @return score value.
    */
   public final String getScores() {
-    return scores.get();
+    return score.get();
   }
 
   /**
@@ -74,7 +71,7 @@ public class Profile {
    * @param value total score of each game.
    */
   public final void setScores(int value) {
-    scores.set(Integer.toString(value));
+    score.set(Integer.toString(value));
   }
 
   /**
@@ -113,8 +110,8 @@ public class Profile {
    * Get StringProperty of score.
    * @return StringProperty of score
    */
-  public StringProperty scoresProperty() {
-    return scores;
+  public StringProperty scoreProperty() {
+    return score;
   }
 
   /**
@@ -130,7 +127,7 @@ public class Profile {
    * @param listener observer object for score.
    */
   public void addScoreListener(ChangeListener<String> listener) {
-    scores.addListener(listener);
+    score.addListener(listener);
   }
 
   /**
@@ -175,8 +172,8 @@ public class Profile {
   /**
    * Read score from text file.
    */
-  public void readScore() {
-    if (!LoadScore()) {
+  public void readScores() {
+    if (!LoadScores()) {
       Alert noScoreFileAlert = new Alert(Alert.AlertType.ERROR);
       noScoreFileAlert.setTitle("Cannot find score file");
       noScoreFileAlert.showAndWait();
@@ -187,20 +184,20 @@ public class Profile {
    * Load scores from text file
    * @return true if file can be loaded in IDE mode.
    */
-  private boolean LoadScore() {
+  private boolean LoadScores() {
     Path path = Paths.get("HighScore.txt");
 
     if (!Files.exists(path)){
       return false;
     }
-    return readFileScore(path);
+    return readFileScores(path);
   }
 
   /**
    *  This method is loaded score file when in IDE mode.
    * @param filePath  this is a path to file.
    */
-  public boolean readFileScore(Path filePath) {
+  public boolean readFileScores(Path filePath) {
 
     try (BufferedInputStream bufferedInputStream = new BufferedInputStream(Files.newInputStream(filePath))) {
 

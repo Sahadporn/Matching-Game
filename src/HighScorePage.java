@@ -40,8 +40,7 @@ public class HighScorePage extends Pane {
     layoutHighScore.setStyle(
         "-fx-pref-width: 500;"
             + "-fx-pref-height: 600;");
-    Image background = new Image(this.getClass()
-        .getResourceAsStream("/resources/Pictures/bg13.gif"));
+    Image background = new Image("/resources/Pictures/bg13.gif");
     BackgroundImage backgroundImage = new BackgroundImage(background, BackgroundRepeat.REPEAT,
         BackgroundRepeat.REPEAT,
         BackgroundPosition.DEFAULT,
@@ -49,8 +48,7 @@ public class HighScorePage extends Pane {
     layoutHighScore.setBackground(new Background(backgroundImage));
 
 
-    Image highScoreImage = new Image(this.getClass()
-        .getResourceAsStream("/resources/Pictures/highscore.png"));
+    Image highScoreImage = new Image("/resources/Pictures/highscore.png");
     ImageView highScoreIV = new ImageView(highScoreImage);
     highScoreIV.setFitHeight(100);
     highScoreIV.setFitWidth(120);
@@ -72,8 +70,7 @@ public class HighScorePage extends Pane {
       displayBox.getChildren().add(singleScore);
     }
 
-    Image returnButtonImage = new Image(this.getClass()
-        .getResourceAsStream("/resources/Pictures/PixelArt.png"));
+    Image returnButtonImage = new Image("/resources/Pictures/PixelArt.png");
     ImageView returnButtonIV = new ImageView(returnButtonImage);
     returnButtonIV.setFitHeight(40);
     returnButtonIV.setFitWidth(100);

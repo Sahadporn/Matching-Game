@@ -1,4 +1,3 @@
-import java.io.IOException;
 import javafx.scene.layout.Pane;
 
 /**
@@ -17,7 +16,7 @@ public class GameFactory {
    *  This is a constructor to create GameFactory.
    */
   public GameFactory() {
-    profile.readScore();
+    profile.readScores();
     imageCards.LoadImages();
   }
 
