@@ -94,7 +94,7 @@ public class MainMenu extends Pane {
         + "-fx-font-family: Lucida Console;");
 
     nameInput.setOnKeyPressed(event -> {if (event.getCode().equals(KeyCode.ENTER)) {
-                                profile.addName(nameInput.getText());}});
+                                profile.addName(nameInput.getText()); }});
 
     ImageView enterIconImage = new ImageView("/resources/Pictures/icon.png");
     enterIconImage.setFitWidth(30);
@@ -159,7 +159,6 @@ public class MainMenu extends Pane {
 
     @Override
     public void handle(ActionEvent actionEvent) {
-      profile.readScores();
       Main.getMainStage().setScene(Main.getHighScoreStage());
     }
   }

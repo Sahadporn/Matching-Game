@@ -185,8 +185,7 @@ public class GamePage extends Pane {
     input.setHeaderText("Your score: " + profile.getScores());
     input.setOnCloseRequest(dialogEvent -> {
       int totalScore = Integer.parseInt(profile.scoreProperty().get());
-      profile.addScoreToMap(totalScore);
-      profile.writeScore();
+      profile.updateScore(totalScore);
       reBuildBoard(level);
       timerInstance.resetTimer();
       Main.getMainStage().setScene(Main.getMenuStage());

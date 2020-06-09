@@ -2,13 +2,13 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 
 /**
@@ -34,6 +34,7 @@ public class Profile {
 
   private GameConfig gameConfig = GameConfig.getGameConfigInstance();
 
+  private ObservableList<Player> playerList = FXCollections.observableArrayList();;
 
   private Profile() {
 
@@ -139,14 +140,12 @@ public class Profile {
   }
 
   /**
-   * Add name to the scoreMap.
+   * Add name to the playerList.
    * @param name player name
    */
   public void addName(String name) {
     player = name;
-    if (!scoresMap.containsKey(player)) {
-      scoresMap.put(player, 0);
-    }
+    playerList.add(new Player(player));
   }
 
   /**
@@ -158,15 +157,17 @@ public class Profile {
   }
 
   /**
-   * Add score to the scoreMap.
+   * Add score to the playerList.
    * @param score player score
    */
-  public void addScoreToMap(int score) {
-    if (scoresMap.containsKey(player)) {
-      if (scoresMap.get(player) < score) {
-        scoresMap.put(player, score);
+  public void updateScore(int score) {
+    for (int i = 0; playerList.size() > i; i++) {
+      if (playerList.get(i).getName().equals(player) && playerList.get(i).getScore() < score) {
+        playerList.get(i).setScore(score);
+        break;
       }
     }
+    writeScore();
   }
 
   /**
@@ -206,9 +207,7 @@ public class Profile {
         String name = scan.next();
         int score = scan.nextInt();
 
-        if (!scoresMap.containsKey(name)) {
-          scoresMap.put(name, score);
-        }
+        playerList.add(new Player(name, score));
 
       }
     } catch (IOException e) {
@@ -226,9 +225,9 @@ public class Profile {
     Path path = Paths.get("HighScore.txt");
 
     try (OutputStream out = Files.newOutputStream(path)) {
-      Set<String> name = scoresMap.keySet();
-      for (String element : name) {
-        String writeScore = element + " " + scoresMap.get(element) + "\n";
+
+      for (Player element : playerList) {
+        String writeScore = element.getName() + " " + element.getScore() + "\n";
         byte[] buff = writeScore.getBytes();
         out.write(buff, 0, buff.length);
       }
@@ -239,11 +238,11 @@ public class Profile {
   }
 
   /**
-   * Get scoreMap.
-   * @return map of player names and scores.
+   * Get playerList.
+   * @return list of player names and scores.
    */
-  public Map<String, Integer> getScoresMap() {
-    return scoresMap;
+  public ObservableList<Player> getPlayerList() {
+    return this.playerList;
   }
 
 }

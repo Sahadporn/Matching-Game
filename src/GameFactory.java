@@ -16,7 +16,6 @@ public class GameFactory {
    *  This is a constructor to create GameFactory.
    */
   public GameFactory() {
-    profile.readScores();
     imageCards.LoadImages();
   }
 

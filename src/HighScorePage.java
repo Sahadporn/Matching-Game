@@ -1,8 +1,8 @@
-import java.util.Map;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -11,17 +11,15 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
+
 
 public class HighScorePage extends Pane {
 
   /**Display the high score of players.*/
   private Pane layoutHighScore;
   private Profile profile = Profile.getProfileInstance();
-  VBox displayBox;
+  TableView<Player> displayTable;
   Button returnButton;
-  Map<String, Integer> scoreMap;
 
   /**
    * Call high score display.
@@ -54,21 +52,7 @@ public class HighScorePage extends Pane {
     highScoreIV.setFitWidth(120);
     highScoreIV.setLayoutX(190);
 
-    scoreMap = profile.getScoresMap();
-    displayBox = new VBox();
-    displayBox.setLayoutY(90);
-    displayBox.setLayoutX(210);
-    displayBox.setAlignment(Pos.CENTER);
-    displayBox.setStyle("-fx-border-color: #ADFF2F;"
-        + "-fx-spacing: 5;");
-    for (String element : scoreMap.keySet()) {
-      Text singleScore = new Text();
-      singleScore.setText(element + " " + scoreMap.get(element));
-      singleScore.setStyle("-fx-font-family: Lucida Console;"
-          + "-fx-font-size: 15;"
-          + "-fx-fill: yellow;");
-      displayBox.getChildren().add(singleScore);
-    }
+    displayTable = tableCreator();
 
     Image returnButtonImage = new Image("/resources/Pictures/PixelArt.png");
     ImageView returnButtonIV = new ImageView(returnButtonImage);
@@ -80,7 +64,38 @@ public class HighScorePage extends Pane {
     returnButton.setLayoutY(10);
     returnButton.setOnAction(new ReturnButtonHandler());
 
-    layoutHighScore.getChildren().addAll(displayBox, returnButton, highScoreIV);
+    layoutHighScore.getChildren().addAll(displayTable, returnButton, highScoreIV);
+  }
+
+  private TableView<Player> tableCreator() {
+    TableView<Player> table = new TableView<Player>(profile.getPlayerList());
+    table.setLayoutY(90);
+    table.setLayoutX(110);
+    table.setEditable(false);
+    table.setStyle("-fx-border-color: transparent;"
+                    + "-fx-background-color: transparent;");
+    TableColumn<Player, String> nameColumn = new TableColumn<Player, String>("Player");
+    nameColumn.setMinWidth(100);
+    nameColumn.setStyle("-fx-background-color: black;"
+                        + "-fx-text-background-color: #ADFF2F;"
+                        + "-fx-alignment: center;"
+                        + "-fx-border-color: #ADFF2F;"
+                        + "-fx-border-insets: 2;");
+    //nameColumn.setCellValueFactory(new PropertyValueFactory<Player, String>("player"));
+    nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+    TableColumn<Player, Number> scoreColumn = new TableColumn<Player, Number>("High Score");
+    scoreColumn.setMinWidth(100);
+    scoreColumn.setStyle("-fx-background-color: black;"
+        + "-fx-text-background-color: #ADFF2F;"
+        + "-fx-alignment: center;"
+        + "-fx-border-color: #ADFF2F;"
+        + "-fx-border-insets: 2;");
+    //scoreColumn.setCellValueFactory(new PropertyValueFactory<Player, Integer>("highscore"));
+    scoreColumn.setCellValueFactory(cellData -> cellData.getValue().scoreProperty());
+    table.getColumns().addAll(nameColumn, scoreColumn);
+    table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+    return table;
   }
 
   /**
@@ -91,23 +106,12 @@ public class HighScorePage extends Pane {
     @Override
     public void handle(ActionEvent actionEvent) {
 
-      layoutHighScore.getChildren().remove(displayBox);
-      scoreMap = profile.getScoresMap();
-      displayBox.getChildren().clear();
-      displayBox.setLayoutY(90);
-      displayBox.setLayoutX(210);
-      displayBox.setAlignment(Pos.CENTER);
-      displayBox.setStyle("-fx-border-color: #ADFF2F;"
-          + "-fx-spacing: 5;");
-      for (String element : scoreMap.keySet()) {
-        Text singleScore = new Text();
-        singleScore.setText(element + " " + scoreMap.get(element));
-        singleScore.setStyle("-fx-font-family: Lucida Console;"
-            + "-fx-font-size: 15;"
-            + "-fx-fill: yellow;");
-        displayBox.getChildren().add(singleScore);
-      }
-      layoutHighScore.getChildren().add(displayBox);
+      layoutHighScore.getChildren().remove(displayTable);
+      displayTable.getColumns().clear();
+      displayTable = tableCreator();
+
+      layoutHighScore.getChildren().add(displayTable);
+
       Main.getMainStage().setScene(Main.getMenuStage());
     }
   }
