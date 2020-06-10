@@ -161,8 +161,14 @@ public class Profile {
    * @param score player score
    */
   public void updateScore(int score) {
+//    for (int i = 0; playerList.size() > i; i++) {
+//      if (playerList.get(i).getName().equals(player) && playerList.get(i).getScore() < score) {
+//        playerList.get(i).setScore(score);
+//        break;
+//      }
+//    }
     for (int i = 0; playerList.size() > i; i++) {
-      if (playerList.get(i).getName().equals(player) && playerList.get(i).getScore() < score) {
+      if (playerList.get(i).getName().equals(player)) {
         playerList.get(i).setScore(score);
         break;
       }

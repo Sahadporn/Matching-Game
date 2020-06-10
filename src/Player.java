@@ -54,10 +54,10 @@ public class Player {
 
   /**
    * Set score property.
-   * @param score player new score
+   * @param newScore player new score
    */
-  public void setScore(int score) {
-    this.score = new SimpleIntegerProperty(score);
+  public void setScore(int newScore) {
+    if (newScore > this.score.get()) this.score.setValue(newScore);
   }
 
 }
