@@ -1,4 +1,5 @@
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,6 +11,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  * Collect scores and lives for each player.
@@ -145,7 +148,37 @@ public class Profile {
    */
   public void addName(String name) {
     player = name;
-    playerList.add(new Player(player));
+    if(!isNameDuplicate(player)) {
+      playerList.add(new Player(player));
+      Alert successfulAddName = new Alert(Alert.AlertType.INFORMATION);
+      ImageView icon = new ImageView("/resources/Pictures/icon.png");
+      icon.setFitWidth(50);
+      icon.setFitHeight(50);
+      successfulAddName.setGraphic(icon);
+      successfulAddName.setTitle("Success!!!");
+      successfulAddName.setHeaderText("Add player name successful.");
+      successfulAddName.showAndWait();
+    }
+    else {
+      Alert alert = new Alert(Alert.AlertType.INFORMATION);
+      alert.setTitle("NO!!!");
+      alert.setHeaderText("Player name already exist.");
+      alert.showAndWait();
+    }
+  }
+
+  /**
+   * Check if player name already exist or not.
+   * @param name player name
+   * @return true if player name is duplicate, false otherwise.
+   */
+  public boolean isNameDuplicate(String name){
+    for (Player element : playerList) {
+      if (element.getName().equals(name)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -161,12 +194,6 @@ public class Profile {
    * @param score player score
    */
   public void updateScore(int score) {
-//    for (int i = 0; playerList.size() > i; i++) {
-//      if (playerList.get(i).getName().equals(player) && playerList.get(i).getScore() < score) {
-//        playerList.get(i).setScore(score);
-//        break;
-//      }
-//    }
     for (int i = 0; playerList.size() > i; i++) {
       if (playerList.get(i).getName().equals(player)) {
         playerList.get(i).setScore(score);
@@ -209,12 +236,18 @@ public class Profile {
     try (BufferedInputStream bufferedInputStream = new BufferedInputStream(Files.newInputStream(filePath))) {
 
       Scanner scan = new Scanner(bufferedInputStream);
-      while (scan.hasNext()) {
-        String name = scan.next();
-        int score = scan.nextInt();
-
-        playerList.add(new Player(name, score));
-
+      while (scan.hasNextLine()) {
+        String aLine = scan.nextLine();
+        //int score = scan.nextInt();
+        String[] lineArray = {};
+        lineArray = aLine.trim().split(":");
+        int score = 0;
+        try {
+          score = Integer.parseInt(lineArray[1]);
+          playerList.add(new Player(lineArray[0], score));
+        } catch (NumberFormatException N) {
+          System.out.println("Error occur while reading line.");
+        }
       }
     } catch (IOException e) {
       System.out.println(e + " Cannot read file");
@@ -233,7 +266,7 @@ public class Profile {
     try (OutputStream out = Files.newOutputStream(path)) {
 
       for (Player element : playerList) {
-        String writeScore = element.getName() + " " + element.getScore() + "\n";
+        String writeScore = element.getName() + ":" + element.getScore() + "\n";
         byte[] buff = writeScore.getBytes();
         out.write(buff, 0, buff.length);
       }

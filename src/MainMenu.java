@@ -88,25 +88,25 @@ public class MainMenu extends Pane {
     nameInput.setPrefWidth(200);
     nameInput.setPrefHeight(30);
     nameInput.setLayoutY(330);
-    nameInput.setLayoutX(100);
+    nameInput.setLayoutX(150);
     nameInput.setStyle("-fx-background-color: #FFDFFD;"
         + "-fx-text-fill: #583759;"
         + "-fx-font-family: Lucida Console;");
 
     nameInput.setOnKeyPressed(event -> {if (event.getCode().equals(KeyCode.ENTER)) {
-                                profile.addName(nameInput.getText()); }});
+                                profile.addName(nameInput.getText().trim()); }});
 
-    ImageView enterIconImage = new ImageView("/resources/Pictures/icon.png");
-    enterIconImage.setFitWidth(30);
-    enterIconImage.setFitHeight(30);
-    Button enterButton = new Button("Enter");
-    enterButton.setGraphic(enterIconImage);
-    enterButton.setFont(Font.font("Lucida Console"));
-    enterButton.setTextFill(Color.YELLOW);
-    enterButton.setBackground(Background.EMPTY);
-    enterButton.setOnAction(new InputHandler());
-    enterButton.setLayoutY(320);
-    enterButton.setLayoutX(300);
+//    ImageView enterIconImage = new ImageView("/resources/Pictures/icon.png");
+//    enterIconImage.setFitWidth(30);
+//    enterIconImage.setFitHeight(30);
+//    Button enterButton = new Button("Enter");
+//    enterButton.setGraphic(enterIconImage);
+//    enterButton.setFont(Font.font("Lucida Console"));
+//    enterButton.setTextFill(Color.YELLOW);
+//    enterButton.setBackground(Background.EMPTY);
+//    enterButton.setOnAction(new InputHandler());
+//    enterButton.setLayoutY(320);
+//    enterButton.setLayoutX(300);
 
 
     Image highScoreImage = new Image("/resources/Pictures/bar.png");
@@ -131,7 +131,7 @@ public class MainMenu extends Pane {
     exitButton.setOnAction(actionEvent -> Platform.exit());
 
     menuLayout.getChildren().addAll(iconIV, easyModeButton, normalModeButton,
-        nameInput, enterButton, highScoreButton, exitButton);
+        nameInput, highScoreButton, exitButton);
   }
 
   /**
@@ -163,16 +163,16 @@ public class MainMenu extends Pane {
     }
   }
 
-  /**
-   * Accept name input and put to scoreMap.
-   */
-  class InputHandler implements EventHandler<ActionEvent> {
-
-    @Override
-    public void handle(ActionEvent event) {
-      profile.addName(nameInput.getText());
-    }
-  }
+//  /**
+//   * Accept name input and put to scoreMap.
+//   */
+//  class InputHandler implements EventHandler<ActionEvent> {
+//
+//    @Override
+//    public void handle(ActionEvent event) {
+//      profile.addName(nameInput.getText());
+//    }
+//  }
 
   /**
    * Handle the building easy mode game board.

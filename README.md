@@ -23,7 +23,7 @@ Main menu
     1. Enter their name in the pink input box
     below the game's logo.
     2. Player must **always** press the ```Enter``` button
-    located next to the input box or else their scores will not be saved.
+    or else their scores will not be saved.
 - Players can choose difficulties of the game by pressing
 either the ```Easy``` button or ```Normal``` button.
 
